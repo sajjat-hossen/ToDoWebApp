@@ -1,0 +1,32 @@
+﻿@model List<Label>
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Label List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Label" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i></i> Create New Label
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Label Name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var label in Model)
+            {
+                <tr>
+                    <td>@label.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
