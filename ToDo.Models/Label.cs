@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace ToDoWeb.Models
+namespace ToDo.Models
 {
     public class Label
     {
@@ -9,6 +10,7 @@ namespace ToDoWeb.Models
 
         [Required]
         [MaxLength(30)]
+        [DisplayName("Label Name")]
         public string Name { get; set; }
 
     }

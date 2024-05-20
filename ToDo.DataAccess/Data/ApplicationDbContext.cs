@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ToDoWeb.Models;
+using ToDo.Models;
 
-namespace ToDoWeb.Data
+namespace ToDo.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -10,11 +10,6 @@ namespace ToDoWeb.Data
             
         }
         public DbSet<Label> Labels { get; set; }
-
-        internal List<Label> ToList()
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

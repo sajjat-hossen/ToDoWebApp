@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace ToDoWeb.Migrations
+namespace ToDo.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddLabelTableToDb : Migration

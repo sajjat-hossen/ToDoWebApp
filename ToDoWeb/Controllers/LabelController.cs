@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ToDoWeb.Data;
-using ToDoWeb.Models;
+using ToDo.DataAccess.Data;
+using ToDo.Models;
 
-namespace ToDoWeb.Controllers
+namespace ToDo.Controllers
 {
     public class LabelController : Controller
     {
