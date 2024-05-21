@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDo.DataAccess.Repository.IRepository;
 using ToDo.Models;
 
@@ -7,18 +8,26 @@ namespace ToDoWeb.Controllers
     public class ToDoTaskController : Controller
     {
         private readonly IToDoTaskRepository toDoTaskRepo;
+        private readonly ILabelRepository labelRepo;
 
-        public ToDoTaskController(IToDoTaskRepository toDoTaskRepo)
+        public ToDoTaskController(IToDoTaskRepository toDoTaskRepo, ILabelRepository labelRepo)
         {
             this.toDoTaskRepo = toDoTaskRepo;
+            this.labelRepo = labelRepo;
         }
         public IActionResult Index()
         {
-            List<ToDoTask> toDoTasks= toDoTaskRepo.GetAll().ToList();
+            List<ToDoTask> toDoTasks= toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
             return View(toDoTasks);
         }
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAll().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+            ViewBag.LabelList = labelList;
             return View();
         }
 
@@ -50,6 +59,12 @@ namespace ToDoWeb.Controllers
             {
                 return NotFound();
             }
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAll().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+            ViewBag.LabelList = labelList;
 
             return View(toDoTaskFromDb);
         }
@@ -76,7 +91,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id, includeProperties: "Label");
 
             if (toDoTaskFromDb == null)
             {
@@ -101,5 +116,6 @@ namespace ToDoWeb.Controllers
 
             return RedirectToAction("Index");
         }
+
     }
 }

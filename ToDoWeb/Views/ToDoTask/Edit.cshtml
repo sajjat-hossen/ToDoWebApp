@@ -28,6 +28,13 @@
                     <span asp-validation-for="DueDate" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
+                    <select asp-for="LabelId" asp-items="ViewBag.LabelList" class="form-select border-0 shadow">
+                        <option disabled selected>--Select Label--</option>
+                    </select>
+                    <label asp-for="LabelId" class="ms-2"></label>
+                    <span asp-validation-for="LabelId" class="text-danger"></span>
+                </div>
+                <div class="form-floating py-2 col-12">
                     <input asp-for="Priority" class="form-control border-0 shadow" />
                     <label asp-for="Priority" class="ms-2"></label>
                     <span asp-validation-for="Priority" class="text-danger"></span>
