@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDo.DataAccess.Data;
+using ToDo.DataAccess.Repository.IRepository;
 using ToDo.Models;
 
 namespace ToDo.Controllers
 {
     public class LabelController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ILabelRepository labelRepo;
 
-        public LabelController(ApplicationDbContext dbContext)
+        public LabelController(ILabelRepository labelRepo)
         {
-            this.dbContext = dbContext;
+            this.labelRepo = labelRepo;
         }
 
         public IActionResult Index()
         {
-            List<Label> labels = dbContext.Labels.ToList();
+            List<Label> labels = labelRepo.GetAll().ToList();
 
             return View(labels);
         }
@@ -30,8 +31,8 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                dbContext.Labels.Add(label);
-                dbContext.SaveChanges();
+                labelRepo.Add(label);
+                labelRepo.Save();
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -47,7 +48,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = dbContext.Labels.Find(id);
+            Label? labelFromDb = labelRepo.Get(u => u.Id == id);
 
             if (labelFromDb == null)
             {
@@ -62,8 +63,8 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                dbContext.Labels.Update(label);
-                dbContext.SaveChanges();
+                labelRepo.Update(label);
+                labelRepo.Save();
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -79,7 +80,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = dbContext.Labels.Find(id);
+            Label? labelFromDb = labelRepo.Get(u => u.Id == id);
 
             if (labelFromDb == null)
             {
@@ -92,14 +93,14 @@ namespace ToDo.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
-            Label? label = dbContext.Labels.Find(id);
+            Label? label = labelRepo.Get(u => u.Id == id);
             if (label == null)
             {
                 return NotFound();
             }
 
-            dbContext.Labels.Remove(label);
-            dbContext.SaveChanges();
+            labelRepo.Remove(label);
+            labelRepo.Save();
             TempData["success"] = "Label Deleted Successfully";
 
             return RedirectToAction("Index");
