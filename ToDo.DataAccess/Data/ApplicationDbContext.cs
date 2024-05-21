@@ -10,6 +10,7 @@ namespace ToDo.DataAccess.Data
             
         }
         public DbSet<Label> Labels { get; set; }
+        public DbSet<ToDoTask> ToDoTasks { get; set; }
     }
 
 }
