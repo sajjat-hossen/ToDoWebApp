@@ -7,12 +7,22 @@ namespace ToDo.Controllers
 {
     public class LabelController : Controller
     {
+
+        #region Properties
         private readonly ILabelRepository labelRepo;
+
+        #endregion
+
+        #region CTOR
 
         public LabelController(ILabelRepository labelRepo)
         {
             this.labelRepo = labelRepo;
         }
+
+        #endregion
+
+        #region Index
 
         public IActionResult Index()
         {
@@ -21,10 +31,18 @@ namespace ToDo.Controllers
             return View(labels);
         }
 
+        #endregion
+
+        #region Create
+
         public IActionResult Create()
         {
             return View();
         }
+
+        #endregion
+
+        #region Create
 
         [HttpPost]
         public IActionResult Create(Label label)
@@ -40,6 +58,10 @@ namespace ToDo.Controllers
             
             return View();
         }
+
+        #endregion
+
+        #region Edit
 
         public IActionResult Edit(int? id)
         {
@@ -58,6 +80,10 @@ namespace ToDo.Controllers
             return View(labelFromDb);
         }
 
+        #endregion
+
+        #region Edit
+
         [HttpPost]
         public IActionResult Edit(Label label)
         {
@@ -72,6 +98,10 @@ namespace ToDo.Controllers
 
             return View();
         }
+
+        #endregion
+
+        #region Delete
 
         public IActionResult Delete(int? id)
         {
@@ -90,6 +120,10 @@ namespace ToDo.Controllers
             return View(labelFromDb);
         }
 
+        #endregion
+
+        #region DeletePost
+
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
@@ -105,5 +139,7 @@ namespace ToDo.Controllers
 
             return RedirectToAction("Index");
         }
+
+        #endregion
     }
 }

@@ -7,19 +7,35 @@ namespace ToDoWeb.Controllers
 {
     public class ToDoTaskController : Controller
     {
+
+        #region Properties
         private readonly IToDoTaskRepository toDoTaskRepo;
         private readonly ILabelRepository labelRepo;
+
+        #endregion
+
+        #region CTOR
 
         public ToDoTaskController(IToDoTaskRepository toDoTaskRepo, ILabelRepository labelRepo)
         {
             this.toDoTaskRepo = toDoTaskRepo;
             this.labelRepo = labelRepo;
         }
+
+        #endregion
+
+        #region Index
         public IActionResult Index()
         {
             List<ToDoTask> toDoTasks= toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+            
             return View(toDoTasks);
         }
+
+        #endregion
+
+        #region Create
+
         public IActionResult Create()
         {
             IEnumerable<SelectListItem> labelList = labelRepo.GetAll().Select(u => new SelectListItem
@@ -28,8 +44,13 @@ namespace ToDoWeb.Controllers
                 Value = u.Id.ToString()
             });
             ViewBag.LabelList = labelList;
+
             return View();
         }
+
+        #endregion
+
+        #region Create
 
         [HttpPost]
         public IActionResult Create(ToDoTask toDoTask)
@@ -45,6 +66,10 @@ namespace ToDoWeb.Controllers
 
             return View();
         }
+
+        #endregion
+
+        #region Edit
 
         public IActionResult Edit(int? id)
         {
@@ -69,6 +94,10 @@ namespace ToDoWeb.Controllers
             return View(toDoTaskFromDb);
         }
 
+        #endregion
+
+        #region Edit
+
         [HttpPost]
         public IActionResult Edit(ToDoTask toDoTask)
         {
@@ -83,6 +112,10 @@ namespace ToDoWeb.Controllers
 
             return View();
         }
+
+        #endregion
+
+        #region Delete
 
         public IActionResult Delete(int? id)
         {
@@ -101,6 +134,10 @@ namespace ToDoWeb.Controllers
             return View(toDoTaskFromDb);
         }
 
+        #endregion
+
+        #region DeletePost
+
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(int? id)
         {
@@ -116,6 +153,8 @@ namespace ToDoWeb.Controllers
 
             return RedirectToAction("Index");
         }
+
+        #endregion
 
     }
 }
