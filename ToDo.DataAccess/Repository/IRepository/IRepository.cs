@@ -13,5 +13,6 @@ namespace ToDo.DataAccess.Repository.IRepository
         T Get(Expression<Func<T, bool>> filters, string? includeProperties = null);
         void Add(T entity);
         void Remove(T entity);
+        IEnumerable<T> GetAllBySearch(Expression<Func<T, bool>> filters, string? includeProperties = null);
     }
 }

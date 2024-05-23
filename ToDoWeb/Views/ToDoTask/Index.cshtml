@@ -9,6 +9,18 @@
         </div>
     </div>
     <div class="card-body p-4">
+        <div class="mb-3">
+            <form method="post" asp-controller="ToDoTask" asp-action="Index">
+                <div class="row pb-3">
+                    <div class="col-3">
+                        <input name="queryTerm" class="form-control border-1" />
+                    </div>
+                    <div class="col-5 col-md-2">
+                        <button type="submit" class="btn btn-primary form-control">Search</button>
+                    </div>
+                    </<div>
+            </form>
+        </div>
         <div class="row pb-3">
             <div class="col-6">
                 <a asp-controller="ToDoTask" asp-action="DeleteCompletedTask" class="btn btn-info">

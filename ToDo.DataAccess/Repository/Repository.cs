@@ -80,5 +80,23 @@ namespace ToDo.DataAccess.Repository
         }
 
         #endregion
+
+        #region GetAllBySearch
+
+        public IEnumerable<T> GetAllBySearch(Expression<Func<T, bool>> filters, string? includeProperties = null)
+        {
+            IQueryable<T> query = dbSet.Where(filters);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+
+            return query.ToList();
+        }
+
+        #endregion
     }
 }
