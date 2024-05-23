@@ -156,6 +156,34 @@ namespace ToDoWeb.Controllers
 
         #endregion
 
+        #region Complete
+
+        public IActionResult Complete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id);
+
+            if (toDoTaskFromDb == null)
+            {
+                return NotFound();
+            }
+
+            toDoTaskFromDb.Status = "Completed";
+
+            toDoTaskRepo.Update(toDoTaskFromDb);
+            toDoTaskRepo.Save();
+            TempData["success"] = "Congratulations, you have completed task successfully";
+
+            return RedirectToAction("Index");
+
+        }
+
+        #endregion
+
         #region API CALLS
 
         [HttpGet]
