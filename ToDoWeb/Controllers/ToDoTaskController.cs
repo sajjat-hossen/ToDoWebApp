@@ -156,5 +156,17 @@ namespace ToDoWeb.Controllers
 
         #endregion
 
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll ()
+        {
+            List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+
+            return Json(new {data =  toDoTasks});
+        }
+
+        #endregion
+
     }
 }
