@@ -184,7 +184,26 @@ namespace ToDoWeb.Controllers
 
         #endregion
 
-        #region API CALLS
+        #region DeleteCompletedTask
+        public IActionResult DeleteCompletedTask()
+        {
+
+            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Status == "Completed");
+
+            while (toDoTaskFromDb != null) {
+                toDoTaskRepo.Remove(toDoTaskFromDb);
+                toDoTaskRepo.Save();
+                toDoTaskFromDb = toDoTaskRepo.Get(u => u.Status == "Completed");
+            }
+
+            TempData["success"] = "Removed All The Completed Task";
+
+            return RedirectToAction("Index");
+
+        }
+        #endregion
+
+        #region API GetAll
 
         [HttpGet]
         public IActionResult GetAll ()
