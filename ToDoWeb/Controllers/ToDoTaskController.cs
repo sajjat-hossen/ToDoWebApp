@@ -25,6 +25,7 @@ namespace ToDoWeb.Controllers
         #endregion
 
         #region Index
+
         public IActionResult Index()
         {
             List<ToDoTask> toDoTasks= toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
@@ -201,18 +202,6 @@ namespace ToDoWeb.Controllers
             return RedirectToAction("Index");
 
         }
-        #endregion
-
-        #region API GetAll
-
-        [HttpGet]
-        public IActionResult GetAll ()
-        {
-            List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
-
-            return Json(new {data =  toDoTasks});
-        }
-
         #endregion
 
     }
