@@ -26,19 +26,29 @@ namespace ToDoWeb.Controllers
 
         #region Index
 
-        public IActionResult Index(string queryTerm = "")
+        public IActionResult Index()
+        {
+            List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+
+            return View(toDoTasks);
+        }
+        #region Search
+
+        public IActionResult Search(string queryTerm = "")
         {
             if (string.IsNullOrEmpty(queryTerm))
             {
                 List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
 
-                return View(toDoTasks);
+                return View("Index", toDoTasks);
             }
+
             List<ToDoTask> toDoTask = (List<ToDoTask>)toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
 
-            return View(toDoTask);
-            
+            return View("Index", toDoTask);
         }
+
+        #endregion
 
         #endregion
 
