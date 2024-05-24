@@ -14,5 +14,7 @@ namespace ToDo.Models
         public int TotalPages { get; set; }
         public int TotalTasks { get; set; }
         public string QueryTerm { get; set; }
+        public int StartTaskNumber { get; set; }
+        public int EndTaskNumber { get; set; }
     }
 }
