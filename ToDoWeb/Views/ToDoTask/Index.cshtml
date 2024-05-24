@@ -1,4 +1,4 @@
-﻿@model List<ToDoTask>
+﻿@model ToDoTaskViewModel
 
 <div class="card shadow border-0 my-4 mb-5">
     <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
@@ -9,18 +9,6 @@
         </div>
     </div>
     <div class="card-body p-4">
-        <div class="mb-3">
-            <form method="post" asp-controller="ToDoTask" asp-action="Search">
-                <div class="row pb-3">
-                    <div class="col-3">
-                        <input name="queryTerm" class="form-control border-1" />
-                    </div>
-                    <div class="col-5 col-md-2">
-                        <button type="submit" class="btn btn-primary form-control">Search</button>
-                    </div>
-                    </<div>
-            </form>
-        </div>
         <div class="row pb-3">
             <div class="col-6">
                 <a asp-controller="ToDoTask" asp-action="DeleteCompletedTask" class="btn btn-info">
@@ -32,6 +20,18 @@
                     <i class="bi bi-plus-circle"></i></i> Create New Task
                 </a>
             </div>
+        </div>
+        <div class="mb-3">
+            <form method="post" asp-controller="ToDoTask" asp-action="Index">
+                <div class="row pb-3 justify-content-end">
+                    <div class="col-3">
+                        <input name="queryTerm" class="form-control border-1" />
+                    </div>
+                    <div class="col-3 col-md-1">
+                        <button type="submit" class="btn btn-primary form-control">Search</button>
+                    </div>
+                    </<div>
+            </form>
         </div>
         <table class="table table-bordered table-striped" style="width: 100%">
             <thead>
@@ -47,7 +47,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var toDoTask in Model)
+                @foreach (var toDoTask in Model.ToDoTasks)
                 {
                     <tr>
                         <td>@toDoTask.Title</td>
@@ -74,6 +74,36 @@
                 }
             </tbody>
         </table>
+        <div class="row mt-4">
+            <div class="col-6">
+                Showing 41 to 51 of @Model.TotalTasks entries.
+            </div>
+            <div class="col-6">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item"><a class="page-link" asp-controller="ToDoTask" asp-action="Index" asp-route-queryTerm="@Model.QueryTerm" asp-route-currentPage="@(Model.CurrentPage - 1)">Previous</a></li>
+                        }
+                        @for (int i = 1; i <= Model.TotalPages; ++i)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="page-item active"><a class="page-link" asp-controller="ToDoTask" asp-action="Index" asp-route-queryTerm="@Model.QueryTerm" asp-route-currentPage="@i">@i</a></li>
+                            }
+                            else
+                            {
+                                <li class="page-item"><a class="page-link" asp-controller="ToDoTask" asp-action="Index" asp-route-queryTerm="@Model.QueryTerm" asp-route-currentPage="@i">@i</a></li>
+                            }
+                        }
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item"><a class="page-link" asp-controller="ToDoTask" asp-action="Index" asp-route-queryTerm="@Model.QueryTerm" asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a></li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 </div>
 

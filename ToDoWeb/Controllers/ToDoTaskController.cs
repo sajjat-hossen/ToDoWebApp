@@ -26,29 +26,61 @@ namespace ToDoWeb.Controllers
 
         #region Index
 
-        public IActionResult Index()
+        public IActionResult Index(string queryTerm = "", int currentPage = 1)
         {
-            List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+            if (string.IsNullOrEmpty(queryTerm))
+            {
+                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+                ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
+                viewModel.PageSize = 5;
+                viewModel.CurrentPage = currentPage;
+                viewModel.QueryTerm = queryTerm;
+                viewModel.TotalTasks = toDoTasks.Count();
+                viewModel.TotalPages = (int)Math.Ceiling(viewModel.TotalTasks / (double)viewModel.PageSize);
+                viewModel.ToDoTasks = toDoTasks.Skip((viewModel.CurrentPage - 1) * viewModel.PageSize).Take(viewModel.PageSize);
+                return View(viewModel);
+            }
 
-            return View(toDoTasks);
+            IEnumerable<ToDoTask> toDoTask = toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
+
+            ToDoTaskViewModel viewModel1 = new ToDoTaskViewModel();
+            viewModel1.PageSize = 5;
+            viewModel1.CurrentPage = currentPage;
+            viewModel1.QueryTerm = queryTerm;
+            viewModel1.TotalTasks = toDoTask.Count();
+            viewModel1.TotalPages = (int)Math.Ceiling(viewModel1.TotalTasks / (double)viewModel1.PageSize);
+            viewModel1.ToDoTasks = toDoTask.Skip((viewModel1.CurrentPage - 1) * viewModel1.PageSize).Take(viewModel1.PageSize);
+            return View(viewModel1);
         }
+
+        #endregion
+
         #region Search
 
         public IActionResult Search(string queryTerm = "")
         {
             if (string.IsNullOrEmpty(queryTerm))
             {
-                List<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
-
-                return View("Index", toDoTasks);
+                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+                ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
+                viewModel.PageSize = 5;
+                viewModel.CurrentPage = 1;
+                viewModel.TotalTasks = toDoTasks.Count();
+                viewModel.TotalPages = (int)Math.Ceiling(viewModel.TotalPages / (double)viewModel.PageSize);
+                viewModel.ToDoTasks = toDoTasks.Skip((viewModel.CurrentPage - 1) * viewModel.PageSize).Take(viewModel.PageSize);
+                return View("Index", viewModel);
             }
 
-            List<ToDoTask> toDoTask = (List<ToDoTask>)toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
+            IEnumerable<ToDoTask> toDoTask = toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
 
-            return View("Index", toDoTask);
+            ToDoTaskViewModel viewModel1 = new ToDoTaskViewModel();
+            viewModel1.PageSize = 5;
+            viewModel1.CurrentPage = 1;
+            viewModel1.TotalTasks = toDoTask.Count();
+            viewModel1.TotalPages = (int)Math.Ceiling(viewModel1.TotalPages / (double)viewModel1.PageSize);
+            viewModel1.ToDoTasks = toDoTask.Skip((viewModel1.CurrentPage - 1) * viewModel1.PageSize).Take(viewModel1.PageSize);
+            return View("Index", viewModel1);
         }
-
-        #endregion
 
         #endregion
 
