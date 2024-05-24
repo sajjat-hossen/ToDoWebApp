@@ -26,13 +26,13 @@ namespace ToDoWeb.Controllers
 
         #region Index
 
-        public IActionResult Index(string queryTerm = "", int currentPage = 1)
+        public IActionResult Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
         {
             if (string.IsNullOrEmpty(queryTerm))
             {
                 IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
                 ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
-                viewModel.PageSize = 5;
+                viewModel.PageSize = pageSize;
                 viewModel.CurrentPage = currentPage;
                 viewModel.QueryTerm = queryTerm;
                 viewModel.TotalTasks = toDoTasks.Count();
@@ -47,7 +47,7 @@ namespace ToDoWeb.Controllers
             IEnumerable<ToDoTask> toDoTask = toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
 
             ToDoTaskViewModel viewModel1 = new ToDoTaskViewModel();
-            viewModel1.PageSize = 5;
+            viewModel1.PageSize = pageSize;
             viewModel1.CurrentPage = currentPage;
             viewModel1.QueryTerm = queryTerm;
             viewModel1.TotalTasks = toDoTask.Count();
