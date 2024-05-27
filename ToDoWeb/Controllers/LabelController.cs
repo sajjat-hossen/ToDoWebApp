@@ -26,7 +26,7 @@ namespace ToDo.Controllers
 
         public IActionResult Index()
         {
-            List<Label> labels = labelRepo.GetAll().ToList();
+            List<Label> labels = labelRepo.GetAllEntityFromDb().ToList();
 
             return View(labels);
         }
@@ -45,12 +45,12 @@ namespace ToDo.Controllers
         #region Create
 
         [HttpPost]
-        public IActionResult Create(Label label)
+        public async Task<IActionResult> Create(Label label)
         {
             if (ModelState.IsValid)
             {
-                labelRepo.Add(label);
-                labelRepo.Save();
+                await labelRepo.AddAsync(label);
+                await labelRepo.SaveAsync();
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -63,14 +63,14 @@ namespace ToDo.Controllers
 
         #region Edit
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            Label? labelFromDb = labelRepo.Get(u => u.Id == id);
+            Label? labelFromDb = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             if (labelFromDb == null)
             {
@@ -85,12 +85,12 @@ namespace ToDo.Controllers
         #region Edit
 
         [HttpPost]
-        public IActionResult Edit(Label label)
+        public async Task<IActionResult> Edit(Label label)
         {
             if (ModelState.IsValid)
             {
                 labelRepo.Update(label);
-                labelRepo.Save();
+                await labelRepo.SaveAsync();
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -103,14 +103,14 @@ namespace ToDo.Controllers
 
         #region Delete
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            Label? labelFromDb = labelRepo.Get(u => u.Id == id);
+            Label? labelFromDb = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             if (labelFromDb == null)
             {
@@ -125,16 +125,16 @@ namespace ToDo.Controllers
         #region DeletePost
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
+        public async Task<IActionResult> DeletePost(int? id)
         {
-            Label? label = labelRepo.Get(u => u.Id == id);
+            Label? label = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
             if (label == null)
             {
                 return NotFound();
             }
 
             labelRepo.Remove(label);
-            labelRepo.Save();
+            await labelRepo.SaveAsync();
             TempData["success"] = "Label Deleted Successfully";
 
             return RedirectToAction("Index");

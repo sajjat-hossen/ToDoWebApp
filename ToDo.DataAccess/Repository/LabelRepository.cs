@@ -18,11 +18,11 @@ namespace ToDo.DataAccess.Repository
         }
         #endregion
 
-        #region Save
+        #region SaveAsync
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
 
         #endregion

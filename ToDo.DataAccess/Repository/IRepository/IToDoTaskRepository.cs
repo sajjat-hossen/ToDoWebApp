@@ -5,6 +5,6 @@ namespace ToDo.DataAccess.Repository.IRepository
     public interface IToDoTaskRepository : IRepository<ToDoTask>
     {
         void Update(ToDoTask toDoTask);
-        void Save();
+        Task SaveAsync();
     }
 }

@@ -26,11 +26,11 @@ namespace ToDoWeb.Controllers
 
         #region Index
 
-        public IActionResult Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
         {
             if (string.IsNullOrEmpty(queryTerm))
             {
-                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAll(includeProperties: "Label").ToList();
+                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAllEntityFromDb(includeProperties: "Label").ToList();
                 ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
                 viewModel.PageSize = pageSize;
                 viewModel.CurrentPage = currentPage;
@@ -44,7 +44,7 @@ namespace ToDoWeb.Controllers
                 return View(viewModel);
             }
 
-            IEnumerable<ToDoTask> toDoTask = toDoTaskRepo.GetAllBySearch((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
+            IEnumerable<ToDoTask> toDoTask = await toDoTaskRepo.GetAllEnitityFromDbBySearchAsync((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
 
             ToDoTaskViewModel viewModel1 = new ToDoTaskViewModel();
             viewModel1.PageSize = pageSize;
@@ -65,7 +65,7 @@ namespace ToDoWeb.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> labelList = labelRepo.GetAll().Select(u => new SelectListItem
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb().Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -80,12 +80,12 @@ namespace ToDoWeb.Controllers
         #region Create
 
         [HttpPost]
-        public IActionResult Create(ToDoTask toDoTask)
+        public async Task<IActionResult> Create(ToDoTask toDoTask)
         {
             if (ModelState.IsValid)
             {
-                toDoTaskRepo.Add(toDoTask);
-                toDoTaskRepo.Save();
+                await toDoTaskRepo.AddAsync(toDoTask);
+                await toDoTaskRepo.SaveAsync();
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -98,20 +98,20 @@ namespace ToDoWeb.Controllers
 
         #region Edit
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
             }
-            IEnumerable<SelectListItem> labelList = labelRepo.GetAll().Select(u => new SelectListItem
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb().Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -126,12 +126,12 @@ namespace ToDoWeb.Controllers
         #region Edit
 
         [HttpPost]
-        public IActionResult Edit(ToDoTask toDoTask)
+        public async Task<IActionResult> Edit(ToDoTask toDoTask)
         {
             if (ModelState.IsValid)
             {
                 toDoTaskRepo.Update(toDoTask);
-                toDoTaskRepo.Save();
+                await toDoTaskRepo.SaveAsync();
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -144,14 +144,14 @@ namespace ToDoWeb.Controllers
 
         #region Delete
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id, includeProperties: "Label");
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id, includeProperties: "Label");
 
             if (toDoTaskFromDb == null)
             {
@@ -166,16 +166,16 @@ namespace ToDoWeb.Controllers
         #region DeletePost
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
+        public async Task<IActionResult> DeletePost(int? id)
         {
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
             }
 
             toDoTaskRepo.Remove(toDoTaskFromDb);
-            toDoTaskRepo.Save();
+            await toDoTaskRepo.SaveAsync();
             TempData["success"] = "Label Deleted Successfully";
 
             return RedirectToAction("Index");
@@ -185,14 +185,14 @@ namespace ToDoWeb.Controllers
 
         #region Complete
 
-        public IActionResult Complete(int? id)
+        public async Task<IActionResult> Complete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             if (toDoTaskFromDb == null)
             {
@@ -202,7 +202,7 @@ namespace ToDoWeb.Controllers
             toDoTaskFromDb.Status = "Completed";
 
             toDoTaskRepo.Update(toDoTaskFromDb);
-            toDoTaskRepo.Save();
+            await toDoTaskRepo.SaveAsync();
             TempData["success"] = "Congratulations, you have completed task successfully";
 
             return RedirectToAction("Index");
@@ -212,15 +212,15 @@ namespace ToDoWeb.Controllers
         #endregion
 
         #region DeleteCompletedTask
-        public IActionResult DeleteCompletedTask()
+        public async Task<IActionResult> DeleteCompletedTask()
         {
 
-            ToDoTask? toDoTaskFromDb = toDoTaskRepo.Get(u => u.Status == "Completed");
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed");
 
             while (toDoTaskFromDb != null) {
                 toDoTaskRepo.Remove(toDoTaskFromDb);
-                toDoTaskRepo.Save();
-                toDoTaskFromDb = toDoTaskRepo.Get(u => u.Status == "Completed");
+                await toDoTaskRepo.SaveAsync();
+                toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed");
             }
 
             TempData["success"] = "Removed All The Completed Task";

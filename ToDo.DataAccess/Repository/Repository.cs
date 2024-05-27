@@ -24,18 +24,18 @@ namespace ToDo.DataAccess.Repository
 
         #endregion
 
-        #region Add
+        #region AddAsync
 
-        public void Add(T entity)
+        public async Task AddAsync(T entity)
         {
-            dbSet.Add(entity);
+            await dbSet.AddAsync(entity);
         }
 
         #endregion
 
-        #region Get
+        #region GetFirstEntityFromDbBySearchAsync
 
-        public T Get(Expression<Func<T, bool>> filters, string? includeProperties = null)
+        public async Task<T> GetFirstEntityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet.Where(filters);
             if (!string.IsNullOrEmpty(includeProperties))
@@ -45,14 +45,14 @@ namespace ToDo.DataAccess.Repository
                 }
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         #endregion
 
-        #region GetAll
+        #region GetAllEntityFromDb
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAllEntityFromDb(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (!string.IsNullOrEmpty(includeProperties))
@@ -76,9 +76,9 @@ namespace ToDo.DataAccess.Repository
 
         #endregion
 
-        #region GetAllBySearch
+        #region GetAllEnitityFromDbBySearchAsync
 
-        public IEnumerable<T> GetAllBySearch(Expression<Func<T, bool>> filters, string? includeProperties = null)
+        public async Task<IEnumerable<T>> GetAllEnitityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet.Where(filters);
             if (!string.IsNullOrEmpty(includeProperties))
@@ -89,7 +89,7 @@ namespace ToDo.DataAccess.Repository
                 }
             }
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
         #endregion
