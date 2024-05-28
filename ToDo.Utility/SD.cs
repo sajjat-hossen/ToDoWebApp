@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToDo.Utility
 {
-    public class SD
+    public static class SD
     {
+        public const string roleAdmin = "Admin";
+        public const string roleUser = "user";
     }
 }

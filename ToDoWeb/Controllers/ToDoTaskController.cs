@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDo.DataAccess.Repository.IRepository;
 using ToDo.Models;
+using ToDo.Utility;
 
 namespace ToDoWeb.Controllers
 {
+    [Authorize(Roles = SD.roleUser)]
     public class ToDoTaskController : Controller
     {
 

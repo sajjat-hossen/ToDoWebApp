@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ToDo.DataAccess.Data;
 using ToDo.DataAccess.Repository.IRepository;
 using ToDo.Models;
+using ToDo.Utility;
 
 namespace ToDo.Controllers
 {
+    [Authorize(Roles = SD.roleAdmin)]
     public class LabelController : Controller
     {
 

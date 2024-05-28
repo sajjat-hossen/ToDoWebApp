@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ToDo.Models;
 
 namespace ToDo.DataAccess.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -11,6 +13,7 @@ namespace ToDo.DataAccess.Data
         }
         public DbSet<Label> Labels { get; set; }
         public DbSet<ToDoTask> ToDoTasks { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 
 }
