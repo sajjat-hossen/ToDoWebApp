@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,10 +26,13 @@ namespace ToDo.Models
         public string Status { get; set; } = "Pending";
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        [DisplayName("Label")]
         public int LabelId { get; set; }
         [ForeignKey("LabelId")]
         [ValidateNever]
         public Label Label { get; set; }
+        [ValidateNever]
+        public string UserId { get; set; }
 
     }
 }

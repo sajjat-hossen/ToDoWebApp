@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDo.DataAccess.Repository.IRepository;
@@ -14,15 +15,17 @@ namespace ToDoWeb.Controllers
         #region Properties
         private readonly IToDoTaskRepository toDoTaskRepo;
         private readonly ILabelRepository labelRepo;
+        private readonly UserManager<IdentityUser> userManager;
 
         #endregion
 
         #region CTOR
 
-        public ToDoTaskController(IToDoTaskRepository toDoTaskRepo, ILabelRepository labelRepo)
+        public ToDoTaskController(IToDoTaskRepository toDoTaskRepo, ILabelRepository labelRepo, UserManager<IdentityUser> userManager)
         {
             this.toDoTaskRepo = toDoTaskRepo;
             this.labelRepo = labelRepo;
+            this.userManager = userManager;
         }
 
         #endregion
@@ -31,9 +34,10 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
             if (string.IsNullOrEmpty(queryTerm))
             {
-                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAllEntityFromDb(includeProperties: "Label").ToList();
+                IEnumerable<ToDoTask> toDoTasks = toDoTaskRepo.GetAllEntityFromDb(u=> u.UserId == logedUserId, includeProperties: "Label").ToList();
                 ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
                 viewModel.PageSize = pageSize;
                 viewModel.CurrentPage = currentPage;
@@ -47,7 +51,7 @@ namespace ToDoWeb.Controllers
                 return View(viewModel);
             }
 
-            IEnumerable<ToDoTask> toDoTask = await toDoTaskRepo.GetAllEnitityFromDbBySearchAsync((u => u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm), includeProperties: "Label");
+            IEnumerable<ToDoTask> toDoTask = await toDoTaskRepo.GetAllEnitityFromDbBySearchAsync((u => ((u.UserId == logedUserId) && (u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm))), includeProperties: "Label");
 
             ToDoTaskViewModel viewModel1 = new ToDoTaskViewModel();
             viewModel1.PageSize = pageSize;
@@ -68,7 +72,7 @@ namespace ToDoWeb.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb().Select(u => new SelectListItem
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -85,6 +89,8 @@ namespace ToDoWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ToDoTask toDoTask)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
+            toDoTask.UserId = logedUserId;
             if (ModelState.IsValid)
             {
                 await toDoTaskRepo.AddAsync(toDoTask);
@@ -103,18 +109,19 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
 
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
             }
-            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb().Select(u => new SelectListItem
+            IEnumerable<SelectListItem> labelList = labelRepo.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -131,6 +138,8 @@ namespace ToDoWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ToDoTask toDoTask)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
+            toDoTask.UserId = logedUserId;
             if (ModelState.IsValid)
             {
                 toDoTaskRepo.Update(toDoTask);
@@ -149,12 +158,13 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id, includeProperties: "Label");
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId, includeProperties: "Label");
 
             if (toDoTaskFromDb == null)
             {
@@ -171,7 +181,8 @@ namespace ToDoWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            string logedUserId = userManager.GetUserId(HttpContext.User);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
@@ -190,12 +201,13 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Complete(int? id)
         {
+            string logedUserId = userManager.GetUserId(HttpContext.User);
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
 
             if (toDoTaskFromDb == null)
             {
@@ -217,13 +229,13 @@ namespace ToDoWeb.Controllers
         #region DeleteCompletedTask
         public async Task<IActionResult> DeleteCompletedTask()
         {
-
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed");
+            string logedUserId = userManager.GetUserId(HttpContext.User);
+            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed" && u.UserId == logedUserId);
 
             while (toDoTaskFromDb != null) {
                 toDoTaskRepo.Remove(toDoTaskFromDb);
                 await toDoTaskRepo.SaveAsync();
-                toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed");
+                toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed" && u.UserId == logedUserId);
             }
 
             TempData["success"] = "Removed All The Completed Task";

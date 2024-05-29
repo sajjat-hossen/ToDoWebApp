@@ -29,7 +29,7 @@ namespace ToDo.Controllers
 
         public IActionResult Index()
         {
-            List<Label> labels = labelRepo.GetAllEntityFromDb().ToList();
+            List<Label> labels = labelRepo.GetAllEntityFromDb(x => true).ToList();
 
             return View(labels);
         }

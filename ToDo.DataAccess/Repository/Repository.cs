@@ -52,9 +52,9 @@ namespace ToDo.DataAccess.Repository
 
         #region GetAllEntityFromDb
 
-        public IEnumerable<T> GetAllEntityFromDb(string? includeProperties = null)
+        public IEnumerable<T> GetAllEntityFromDb(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = dbSet.Where(filters);
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach(var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {

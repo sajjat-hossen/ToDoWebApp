@@ -4,7 +4,7 @@ namespace ToDo.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAllEntityFromDb(string? includeProperties = null);
+        IEnumerable<T> GetAllEntityFromDb(Expression<Func<T, bool>> filters, string? includeProperties = null);
         Task<T> GetFirstEntityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null);
         Task AddAsync(T entity);
         void Remove(T entity);
