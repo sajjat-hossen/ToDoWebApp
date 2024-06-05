@@ -230,13 +230,10 @@ namespace ToDoWeb.Controllers
         public async Task<IActionResult> DeleteCompletedTask()
         {
             string logedUserId = userManager.GetUserId(HttpContext.User);
-            ToDoTask? toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed" && u.UserId == logedUserId);
+            IEnumerable<ToDoTask> toDoTaskFromDb = toDoTaskRepo.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
 
-            while (toDoTaskFromDb != null) {
-                toDoTaskRepo.Remove(toDoTaskFromDb);
-                await toDoTaskRepo.SaveAsync();
-                toDoTaskFromDb = await toDoTaskRepo.GetFirstEntityFromDbBySearchAsync(u => u.Status == "Completed" && u.UserId == logedUserId);
-            }
+            toDoTaskRepo.RemoveRange(toDoTaskFromDb);
+            await toDoTaskRepo.SaveAsync();
 
             TempData["success"] = "Removed All The Completed Task";
 

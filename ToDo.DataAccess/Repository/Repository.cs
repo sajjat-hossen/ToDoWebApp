@@ -76,6 +76,15 @@ namespace ToDo.DataAccess.Repository
 
         #endregion
 
+        #region RemoveRange
+
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            dbSet.RemoveRange(entities);
+        }
+
+        #endregion
+
         #region GetAllEnitityFromDbBySearchAsync
 
         public async Task<IEnumerable<T>> GetAllEnitityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
