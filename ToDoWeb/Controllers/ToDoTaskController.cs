@@ -89,8 +89,9 @@ namespace ToDoWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ToDoTask toDoTask)
         {
-            string logedUserId = userManager.GetUserId(HttpContext.User);
+            var logedUserId = userManager.GetUserId(HttpContext.User);
             toDoTask.UserId = logedUserId;
+
             if (ModelState.IsValid)
             {
                 await toDoTaskRepo.AddAsync(toDoTask);

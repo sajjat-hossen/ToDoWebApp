@@ -32,7 +32,7 @@ namespace ToDo.Models
         [ValidateNever]
         public Label Label { get; set; }
         [ValidateNever]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
     }
 }
