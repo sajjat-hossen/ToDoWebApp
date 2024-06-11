@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDo.DomainLayer.Models;
 using ToDo.RepositoryLayer.IRepository;
+using ToDo.ServiceLayer.IServices;
 using ToDo.Utility;
 
 namespace ToDo.Controllers
@@ -9,17 +10,17 @@ namespace ToDo.Controllers
     [Authorize(Roles = SD.roleAdmin)]
     public class LabelController : Controller
     {
-
         #region Properties
-        private readonly ILabelRepository labelRepo;
+
+        private readonly ILabelService labelService;
 
         #endregion
 
         #region CTOR
 
-        public LabelController(ILabelRepository labelRepo)
+        public LabelController(ILabelService labelService)
         {
-            this.labelRepo = labelRepo;
+            this.labelService = labelService;
         }
 
         #endregion
@@ -28,7 +29,7 @@ namespace ToDo.Controllers
 
         public IActionResult Index()
         {
-            List<Label> labels = labelRepo.GetAllEntityFromDb(x => true).ToList();
+            List<Label> labels = labelService.GetAllLabelFromDb().ToList();
 
             return View(labels);
         }
@@ -51,8 +52,7 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                await labelRepo.AddAsync(label);
-                await labelRepo.SaveAsync();
+                await labelService.CreateNewLabelAsync(label);
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -72,7 +72,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            Label? labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -91,8 +91,7 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                labelRepo.Update(label);
-                await labelRepo.SaveAsync();
+                await labelService.UpdateLabelAsync(label);
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -112,7 +111,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            Label? labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -129,14 +128,15 @@ namespace ToDo.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            Label? label = await labelRepo.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            Label? label = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+
             if (label == null)
             {
                 return NotFound();
             }
 
-            labelRepo.Remove(label);
-            await labelRepo.SaveAsync();
+            await labelService.DeleteLabelAsync(label);
+
             TempData["success"] = "Label Deleted Successfully";
 
             return RedirectToAction("Index");

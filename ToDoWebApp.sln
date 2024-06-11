@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.RepositoryLayer", "ToD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.DomainLayer", "ToDo.Models\ToDo.DomainLayer.csproj", "{46D5BFC8-0A4A-468D-A519-216087644392}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.Utility", "ToDo.Utility\ToDo.Utility.csproj", "{80F682B7-4565-49E2-BD83-7BB964470576}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.ServiceLayer", "ToDo.ServiceLayer\ToDo.ServiceLayer.csproj", "{4863B3D8-EF23-48DD-B938-41AE181C2042}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +32,10 @@ Global
 		{46D5BFC8-0A4A-468D-A519-216087644392}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46D5BFC8-0A4A-468D-A519-216087644392}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46D5BFC8-0A4A-468D-A519-216087644392}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80F682B7-4565-49E2-BD83-7BB964470576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80F682B7-4565-49E2-BD83-7BB964470576}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80F682B7-4565-49E2-BD83-7BB964470576}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80F682B7-4565-49E2-BD83-7BB964470576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4863B3D8-EF23-48DD-B938-41AE181C2042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4863B3D8-EF23-48DD-B938-41AE181C2042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4863B3D8-EF23-48DD-B938-41AE181C2042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4863B3D8-EF23-48DD-B938-41AE181C2042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
