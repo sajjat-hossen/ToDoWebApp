@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ToDo.Models
+namespace ToDo.DomainLayer.Models
 {
     public class ToDoTask
     {

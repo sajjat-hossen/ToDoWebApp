@@ -1,4 +1,4 @@
-﻿using ToDo.Models;
+﻿using ToDo.DomainLayer.Models;
 
 namespace ToDo.DataAccess.Repository.IRepository
 {

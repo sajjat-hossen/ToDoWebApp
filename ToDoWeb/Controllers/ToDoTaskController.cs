@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDo.DataAccess.Repository.IRepository;
-using ToDo.Models;
+using ToDo.DomainLayer.Models;
 using ToDo.Utility;
 
 namespace ToDoWeb.Controllers

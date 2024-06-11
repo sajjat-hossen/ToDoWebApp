@@ -1,6 +1,6 @@
 ﻿using ToDo.DataAccess.Data;
 using ToDo.DataAccess.Repository.IRepository;
-using ToDo.Models;
+using ToDo.DomainLayer.Models;
 
 namespace ToDo.DataAccess.Repository
 {

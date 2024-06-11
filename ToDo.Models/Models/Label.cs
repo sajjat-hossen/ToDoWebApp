@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ToDo.Models
+namespace ToDo.DomainLayer.Models
 {
     public class Label
     {
