@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ToDo.DataAccess.Data;
 using ToDo.DataAccess.Repository;
-using ToDo.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ToDo.Utility;
+using ToDo.RepositoryLayer.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 

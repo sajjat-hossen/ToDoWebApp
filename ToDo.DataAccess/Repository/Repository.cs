@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using ToDo.DataAccess.Data;
-using ToDo.DataAccess.Repository.IRepository;
+using ToDo.RepositoryLayer.IRepository;
 
 namespace ToDo.DataAccess.Repository
 {

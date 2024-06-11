@@ -1,6 +1,6 @@
 ﻿using ToDo.DomainLayer.Models;
 
-namespace ToDo.DataAccess.Repository.IRepository
+namespace ToDo.RepositoryLayer.IRepository
 {
     public interface ILabelRepository : IRepository<Label>
     {

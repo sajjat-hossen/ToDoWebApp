@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ToDo.DataAccess.Repository.IRepository;
 using ToDo.DomainLayer.Models;
+using ToDo.RepositoryLayer.IRepository;
 using ToDo.Utility;
 
 namespace ToDo.Controllers

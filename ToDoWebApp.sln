@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoWeb", "ToDoWeb\ToDoWeb.csproj", "{9B30E257-47B8-4C48-A375-7C55DBD5F58B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.DataAccess", "ToDo.DataAccess\ToDo.DataAccess.csproj", "{183191A3-0778-491F-8802-CE72612BB3DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDo.RepositoryLayer", "ToDo.DataAccess\ToDo.RepositoryLayer.csproj", "{183191A3-0778-491F-8802-CE72612BB3DE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{46D5BFC8-0A4A-468D-A519-216087644392} = {46D5BFC8-0A4A-468D-A519-216087644392}
 	EndProjectSection
