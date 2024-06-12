@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDo.DomainLayer.Models;
-using ToDo.RepositoryLayer.IRepository;
 using ToDo.ServiceLayer.IServices;
 using ToDo.ServiceLayer;
 
@@ -16,7 +15,7 @@ namespace ToDo.Controllers
 
         #endregion
 
-        #region CTOR
+        #region Constructor
 
         public LabelController(ILabelService labelService)
         {

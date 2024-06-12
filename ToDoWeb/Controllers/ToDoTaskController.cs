@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ToDo.DomainLayer.Models;
-using ToDo.RepositoryLayer.IRepository;
 using ToDo.ServiceLayer.IServices;
 using ToDo.ServiceLayer;
 
@@ -57,6 +54,7 @@ namespace ToDoWeb.Controllers
             if (ModelState.IsValid)
             {
                 await toDoTaskService.CreateNewToDoTaskAsync(toDoTask);
+
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -166,8 +164,8 @@ namespace ToDoWeb.Controllers
             }
 
             toDoTaskFromDb.Status = "Completed";
-
             await toDoTaskService.UpdateToDoTaskAsync(toDoTaskFromDb);
+
             TempData["success"] = "Congratulations, you have completed task successfully";
 
             return RedirectToAction("Index");

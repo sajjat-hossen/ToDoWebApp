@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using ToDo.DomainLayer.Models;
 using ToDo.RepositoryLayer.IRepository;
 using ToDo.ServiceLayer.IServices;
@@ -120,6 +114,7 @@ namespace ToDo.ServiceLayer.Services
         {
             string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
+
             await toDoTaskRepository.AddAsync(toDoTask);
             await toDoTaskRepository.SaveAsync();
         }
@@ -131,6 +126,7 @@ namespace ToDo.ServiceLayer.Services
         public async Task<ToDoTask> GetFirstToDoTaskFromDbBySearchAsync(int? id)
         {
             string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
             ToDoTask? toDoTask = await toDoTaskRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
 
             return toDoTask;
@@ -144,6 +140,7 @@ namespace ToDo.ServiceLayer.Services
         {
             string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
+
             toDoTaskRepository.Update(toDoTask);
             await toDoTaskRepository.SaveAsync();
         }
@@ -164,6 +161,7 @@ namespace ToDo.ServiceLayer.Services
         public IEnumerable<ToDoTask> GetAllCompletedToDoTaskFromDb()
         {
             string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
             IEnumerable<ToDoTask> toDoTaskFromDb = toDoTaskRepository.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
 
             return toDoTaskFromDb;

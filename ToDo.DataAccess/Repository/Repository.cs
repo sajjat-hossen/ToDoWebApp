@@ -14,7 +14,7 @@ namespace ToDo.DataAccess.Repository
 
         #endregion
 
-        #region CTOR
+        #region Constructor
 
         public Repository(ApplicationDbContext dbContext)
         {
@@ -38,9 +38,11 @@ namespace ToDo.DataAccess.Repository
         public async Task<T> GetFirstEntityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet.Where(filters);
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
                     query = query.Include(includeProp);
                 }
             }
@@ -55,9 +57,11 @@ namespace ToDo.DataAccess.Repository
         public IEnumerable<T> GetAllEntityFromDb(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet.Where(filters);
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach(var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
+                foreach(var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
                     query = query.Include(includeProp);
                 }
             }
@@ -90,6 +94,7 @@ namespace ToDo.DataAccess.Repository
         public async Task<IEnumerable<T>> GetAllEnitityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet.Where(filters);
+
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))

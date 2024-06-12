@@ -12,7 +12,7 @@ namespace ToDo.DataAccess.Repository
 
         #endregion
 
-        #region CTOR
+        #region Constructor
         public ToDoTaskRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             this.dbContext = dbContext;
@@ -37,6 +37,5 @@ namespace ToDo.DataAccess.Repository
         }
 
         #endregion
-
     }
 }

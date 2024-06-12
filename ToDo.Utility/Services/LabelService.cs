@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToDo.DomainLayer.Models;
+﻿using ToDo.DomainLayer.Models;
 using ToDo.RepositoryLayer.IRepository;
 using ToDo.ServiceLayer.IServices;
 
@@ -51,6 +46,7 @@ namespace ToDo.ServiceLayer.Services
         public IEnumerable<Label> GetAllLabelFromDb()
         {
             List<Label> labels = labelRepository.GetAllEntityFromDb(x => true).ToList();
+
             return labels;
         }
 

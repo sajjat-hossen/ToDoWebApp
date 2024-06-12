@@ -7,15 +7,18 @@ namespace ToDo.DataAccess.Repository
     public class LabelRepository : Repository<Label>,  ILabelRepository
     {
         #region Properties
+
         private ApplicationDbContext dbContext;
 
         #endregion
 
-        #region CTOR
+        #region Constructor
+
         public LabelRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             this.dbContext = dbContext;
         }
+
         #endregion
 
         #region SaveAsync
