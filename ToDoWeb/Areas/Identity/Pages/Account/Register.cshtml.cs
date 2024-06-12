@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ToDo.Models;
-using ToDo.Utility;
+using ToDo.ServiceLayer;
 
 namespace ToDoWeb.Areas.Identity.Pages.Account
 {

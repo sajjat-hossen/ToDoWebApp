@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ToDo.ServiceLayer\ToDo.ServiceLayer.csproj" />
+    <ProjectReference Include="..\ToDo.Utility\ToDo.ServiceLayer.csproj" />
   </ItemGroup>
 
 </Project>

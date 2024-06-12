@@ -3,7 +3,7 @@ using ToDo.DataAccess.Data;
 using ToDo.DataAccess.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using ToDo.Utility;
+using ToDo.ServiceLayer;
 using ToDo.RepositoryLayer.IRepository;
 using ToDo.ServiceLayer.IServices;
 using ToDo.ServiceLayer.Services;
@@ -27,7 +27,9 @@ builder.Services.ConfigureApplicationCookie(options => {
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ILabelRepository, LabelRepository>();
 builder.Services.AddScoped<IToDoTaskRepository, ToDoTaskRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<ILabelService, LabelService>();
+builder.Services.AddScoped<IToDoTaskService, ToDoTaskService>();
 
 var app = builder.Build();
 
