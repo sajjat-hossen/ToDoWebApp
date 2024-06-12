@@ -87,7 +87,7 @@
                                     <i class="bi bi-check2-circle"></i> Complete
                                 </a>
 
-                                <a asp-controller="ToDoTask" asp-action="Edit" asp-route-id="@toDoTask.Id" class="btn btn-primary mx-2">
+                                <a asp-controller="ToDoTask" asp-action="Edit" asp-route-id="@toDoTask.Id" class="btn btn-primary mx-2 @(toDoTask.Status == "Completed" ? "disabled" : "")">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
                                 <a asp-controller="ToDoTask" asp-action="Delete" asp-route-id="@toDoTask.Id" class="btn btn-danger mx-2">
