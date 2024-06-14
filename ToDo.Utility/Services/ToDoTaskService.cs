@@ -32,9 +32,9 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<ToDoTask> GetAllToDoTaskFromDb()
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            IEnumerable<ToDoTask> toDoTasks = toDoTaskRepository.GetAllEntityFromDb(u => u.UserId == logedUserId, includeProperties: "Label").ToList();
+            var toDoTasks = toDoTaskRepository.GetAllEntityFromDb(u => u.UserId == logedUserId, includeProperties: "Label").ToList();
 
             return toDoTasks;
         }
@@ -45,9 +45,9 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<IEnumerable<ToDoTask>> GetAllToDoTaskFromDbBySearchAsync(string queryTerm)
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            IEnumerable<ToDoTask> toDoTask = await toDoTaskRepository.GetAllEnitityFromDbBySearchAsync((u => ((u.UserId == logedUserId) && (u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm))), includeProperties: "Label");
+            var toDoTask = await toDoTaskRepository.GetAllEnitityFromDbBySearchAsync((u => ((u.UserId == logedUserId) && (u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm))), includeProperties: "Label");
 
             return toDoTask;
         }
@@ -58,7 +58,7 @@ namespace ToDo.ServiceLayer.Services
 
         public ToDoTaskViewModel MakeToDoTaskViewModel(IEnumerable<ToDoTask> toDoTasks, string queryTerm, int currentPage, int pageSize)
         {
-            ToDoTaskViewModel viewModel = new ToDoTaskViewModel();
+            var viewModel = new ToDoTaskViewModel();
             viewModel.PageSize = pageSize;
             viewModel.CurrentPage = currentPage;
             viewModel.QueryTerm = queryTerm;
@@ -97,7 +97,7 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<SelectListItem> GetLabelList()
         {
-            IEnumerable<SelectListItem> labelList = labelRepository.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
+            var labelList = labelRepository.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -112,7 +112,7 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task CreateNewToDoTaskAsync(ToDoTask toDoTask)
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
 
             await toDoTaskRepository.AddAsync(toDoTask);
@@ -125,9 +125,9 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<ToDoTask> GetFirstToDoTaskFromDbBySearchAsync(int? id)
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            ToDoTask? toDoTask = await toDoTaskRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
+            var toDoTask = await toDoTaskRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
 
             return toDoTask;
         }
@@ -138,7 +138,7 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task UpdateToDoTaskAsync(ToDoTask toDoTask)
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
 
             toDoTaskRepository.Update(toDoTask);
@@ -160,9 +160,9 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<ToDoTask> GetAllCompletedToDoTaskFromDb()
         {
-            string? logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            IEnumerable<ToDoTask> toDoTaskFromDb = toDoTaskRepository.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
+            var toDoTaskFromDb = toDoTaskRepository.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
 
             return toDoTaskFromDb;
         }

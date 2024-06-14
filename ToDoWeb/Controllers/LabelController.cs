@@ -28,7 +28,7 @@ namespace ToDo.Controllers
 
         public IActionResult Index()
         {
-            List<Label> labels = labelService.GetAllLabelFromDb().ToList();
+            var labels = labelService.GetAllLabelFromDb().ToList();
 
             return View(labels);
         }
@@ -71,7 +71,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -110,7 +110,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            Label? labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -127,7 +127,7 @@ namespace ToDo.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            Label? label = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var label = await labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (label == null)
             {

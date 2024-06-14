@@ -37,7 +37,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task<T> GetFirstEntityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            IQueryable<T> query = dbSet.Where(filters);
+            var query = dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -56,7 +56,7 @@ namespace ToDo.DataAccess.Repository
 
         public IEnumerable<T> GetAllEntityFromDb(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            IQueryable<T> query = dbSet.Where(filters);
+            var query = dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -93,7 +93,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task<IEnumerable<T>> GetAllEnitityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            IQueryable<T> query = dbSet.Where(filters);
+            var query = dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {

@@ -28,7 +28,7 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
         {
-            ToDoTaskViewModel toDoTaskViewModel = await toDoTaskService.GetDoTaskViewModelFromDbAsync(queryTerm, currentPage, pageSize);
+            var toDoTaskViewModel = await toDoTaskService.GetDoTaskViewModelFromDbAsync(queryTerm, currentPage, pageSize);
             
             return View(toDoTaskViewModel);
         }
@@ -74,7 +74,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -115,7 +115,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -132,7 +132,7 @@ namespace ToDoWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            ToDoTask? toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -156,7 +156,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            ToDoTask? toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -177,7 +177,7 @@ namespace ToDoWeb.Controllers
         #region DeleteCompletedTask
         public async Task<IActionResult> DeleteCompletedTask()
         {
-            IEnumerable<ToDoTask> toDoTaskFromDb = toDoTaskService.GetAllCompletedToDoTaskFromDb();
+            var toDoTaskFromDb = toDoTaskService.GetAllCompletedToDoTaskFromDb();
             await toDoTaskService.DeleteRangeToDoTaskAsync(toDoTaskFromDb);
 
             TempData["success"] = "Removed All The Completed Task";

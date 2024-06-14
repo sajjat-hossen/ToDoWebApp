@@ -45,7 +45,7 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<Label> GetAllLabelFromDb()
         {
-            List<Label> labels = labelRepository.GetAllEntityFromDb(x => true).ToList();
+            var labels = labelRepository.GetAllEntityFromDb(x => true).ToList();
 
             return labels;
         }
@@ -56,7 +56,7 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<Label> GetFirstLabelFromDbBySearchAsync(int? id)
         {
-            Label? labelFromDb = await labelRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            var labelFromDb = await labelRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             return labelFromDb;
         }
