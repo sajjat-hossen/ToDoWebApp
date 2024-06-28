@@ -9,8 +9,8 @@ namespace ToDo.DataAccess.Repository
     {
         #region Properties
 
-        private readonly ApplicationDbContext dbContext;
-        internal DbSet<T> dbSet;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly DbSet<T> _dbSet;
 
         #endregion
 
@@ -18,8 +18,8 @@ namespace ToDo.DataAccess.Repository
 
         public Repository(ApplicationDbContext dbContext)
         {
-            this.dbContext = dbContext;
-            this.dbSet = this.dbContext.Set<T>();
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
         }
 
         #endregion
@@ -28,7 +28,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task AddAsync(T entity)
         {
-            await dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task<T> GetFirstEntityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            var query = dbSet.Where(filters);
+            var query = _dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -56,7 +56,7 @@ namespace ToDo.DataAccess.Repository
 
         public IEnumerable<T> GetAllEntityFromDb(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            var query = dbSet.Where(filters);
+            var query = _dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -75,7 +75,7 @@ namespace ToDo.DataAccess.Repository
 
         public void Remove(T entity)
         {
-            dbSet.Remove(entity);
+            _dbSet.Remove(entity);
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace ToDo.DataAccess.Repository
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            dbSet.RemoveRange(entities);
+            _dbSet.RemoveRange(entities);
         }
 
         #endregion
@@ -93,7 +93,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task<IEnumerable<T>> GetAllEnitityFromDbBySearchAsync(Expression<Func<T, bool>> filters, string? includeProperties = null)
         {
-            var query = dbSet.Where(filters);
+            var query = _dbSet.Where(filters);
 
             if (!string.IsNullOrEmpty(includeProperties))
             {

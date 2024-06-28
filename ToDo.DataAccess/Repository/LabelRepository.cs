@@ -8,7 +8,7 @@ namespace ToDo.DataAccess.Repository
     {
         #region Properties
 
-        private ApplicationDbContext dbContext;
+        private ApplicationDbContext _dbContext;
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace ToDo.DataAccess.Repository
 
         public LabelRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         #endregion
@@ -25,7 +25,7 @@ namespace ToDo.DataAccess.Repository
 
         public async Task SaveAsync()
         {
-            await dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
 
         #endregion
@@ -34,7 +34,7 @@ namespace ToDo.DataAccess.Repository
 
         public void Update(Label label)
         {
-            dbContext.Labels.Update(label);
+            _dbContext.Labels.Update(label);
         }
 
         #endregion

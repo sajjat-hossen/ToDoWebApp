@@ -8,7 +8,7 @@ namespace ToDo.ServiceLayer.Services
     {
         #region Properties
 
-        private readonly ILabelRepository labelRepository;
+        private readonly ILabelRepository _labelRepository;
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace ToDo.ServiceLayer.Services
 
         public LabelService(ILabelRepository labelRepository)
         {
-            this.labelRepository = labelRepository;
+            _labelRepository = labelRepository;
         }
 
         #endregion
@@ -25,8 +25,8 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task CreateNewLabelAsync(Label label)
         {
-            await labelRepository.AddAsync(label);
-            await labelRepository.SaveAsync();
+            await _labelRepository.AddAsync(label);
+            await _labelRepository.SaveAsync();
         }
 
         #endregion
@@ -35,8 +35,8 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task DeleteLabelAsync(Label label)
         {
-            labelRepository.Remove(label);
-            await labelRepository.SaveAsync();
+            _labelRepository.Remove(label);
+            await _labelRepository.SaveAsync();
         }
 
         #endregion
@@ -45,7 +45,7 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<Label> GetAllLabelFromDb()
         {
-            var labels = labelRepository.GetAllEntityFromDb(x => true).ToList();
+            var labels = _labelRepository.GetAllEntityFromDb(x => true).ToList();
 
             return labels;
         }
@@ -56,7 +56,7 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<Label> GetFirstLabelFromDbBySearchAsync(int? id)
         {
-            var labelFromDb = await labelRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
+            var labelFromDb = await _labelRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id);
 
             return labelFromDb;
         }
@@ -67,8 +67,8 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task UpdateLabelAsync(Label label)
         {
-            labelRepository.Update(label);
-            await labelRepository.SaveAsync();
+            _labelRepository.Update(label);
+            await _labelRepository.SaveAsync();
         }
 
         #endregion

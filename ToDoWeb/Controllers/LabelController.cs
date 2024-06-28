@@ -11,7 +11,7 @@ namespace ToDo.Controllers
     {
         #region Properties
 
-        private readonly ILabelService labelService;
+        private readonly ILabelService _labelService;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace ToDo.Controllers
 
         public LabelController(ILabelService labelService)
         {
-            this.labelService = labelService;
+            _labelService = labelService;
         }
 
         #endregion
@@ -28,7 +28,7 @@ namespace ToDo.Controllers
 
         public IActionResult Index()
         {
-            var labels = labelService.GetAllLabelFromDb().ToList();
+            var labels = _labelService.GetAllLabelFromDb().ToList();
 
             return View(labels);
         }
@@ -51,7 +51,7 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                await labelService.CreateNewLabelAsync(label);
+                await _labelService.CreateNewLabelAsync(label);
                 TempData["success"] = "Label Created Successfully";
 
                 return RedirectToAction("Index");
@@ -71,7 +71,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            var labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var labelFromDb = await _labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -90,7 +90,7 @@ namespace ToDo.Controllers
         {
             if (ModelState.IsValid)
             {
-                await labelService.UpdateLabelAsync(label);
+                await _labelService.UpdateLabelAsync(label);
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -110,7 +110,7 @@ namespace ToDo.Controllers
                 return NotFound();
             }
 
-            var labelFromDb = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var labelFromDb = await _labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (labelFromDb == null)
             {
@@ -127,14 +127,14 @@ namespace ToDo.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            var label = await labelService.GetFirstLabelFromDbBySearchAsync(id);
+            var label = await _labelService.GetFirstLabelFromDbBySearchAsync(id);
 
             if (label == null)
             {
                 return NotFound();
             }
 
-            await labelService.DeleteLabelAsync(label);
+            await _labelService.DeleteLabelAsync(label);
 
             TempData["success"] = "Label Deleted Successfully";
 

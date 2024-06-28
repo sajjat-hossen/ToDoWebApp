@@ -11,9 +11,9 @@ namespace ToDo.ServiceLayer.Services
     {
         #region Properties
 
-        private readonly IToDoTaskRepository toDoTaskRepository;
-        private readonly ILabelRepository labelRepository;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IToDoTaskRepository _toDoTaskRepository;
+        private readonly ILabelRepository _labelRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         #endregion
 
@@ -21,9 +21,9 @@ namespace ToDo.ServiceLayer.Services
 
         public ToDoTaskService(IToDoTaskRepository toDoTaskRepository, ILabelRepository labelRepository, IHttpContextAccessor httpContextAccessor)
         {
-            this.toDoTaskRepository = toDoTaskRepository;
-            this.labelRepository = labelRepository;
-            this.httpContextAccessor = httpContextAccessor;
+            _toDoTaskRepository = toDoTaskRepository;
+            _labelRepository = labelRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         #endregion
@@ -32,9 +32,9 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<ToDoTask> GetAllToDoTaskFromDb()
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var toDoTasks = toDoTaskRepository.GetAllEntityFromDb(u => u.UserId == logedUserId, includeProperties: "Label").ToList();
+            var toDoTasks = _toDoTaskRepository.GetAllEntityFromDb(u => u.UserId == logedUserId, includeProperties: "Label").ToList();
 
             return toDoTasks;
         }
@@ -45,9 +45,9 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<IEnumerable<ToDoTask>> GetAllToDoTaskFromDbBySearchAsync(string queryTerm)
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var toDoTask = await toDoTaskRepository.GetAllEnitityFromDbBySearchAsync((u => ((u.UserId == logedUserId) && (u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm))), includeProperties: "Label");
+            var toDoTask = await _toDoTaskRepository.GetAllEnitityFromDbBySearchAsync((u => ((u.UserId == logedUserId) && (u.Label.Name.StartsWith(queryTerm) || u.Title.StartsWith(queryTerm) || u.Description.StartsWith(queryTerm) || u.Status.StartsWith(queryTerm) || Convert.ToString(u.Priority) == queryTerm))), includeProperties: "Label");
 
             return toDoTask;
         }
@@ -97,7 +97,7 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<SelectListItem> GetLabelList()
         {
-            var labelList = labelRepository.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
+            var labelList = _labelRepository.GetAllEntityFromDb(x => true).Select(u => new SelectListItem
             {
                 Text = u.Name,
                 Value = u.Id.ToString()
@@ -112,11 +112,11 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task CreateNewToDoTaskAsync(ToDoTask toDoTask)
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
 
-            await toDoTaskRepository.AddAsync(toDoTask);
-            await toDoTaskRepository.SaveAsync();
+            await _toDoTaskRepository.AddAsync(toDoTask);
+            await _toDoTaskRepository.SaveAsync();
         }
 
         #endregion
@@ -125,9 +125,9 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task<ToDoTask> GetFirstToDoTaskFromDbBySearchAsync(int? id)
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var toDoTask = await toDoTaskRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
+            var toDoTask = await _toDoTaskRepository.GetFirstEntityFromDbBySearchAsync(u => u.Id == id && u.UserId == logedUserId);
 
             return toDoTask;
         }
@@ -138,11 +138,11 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task UpdateToDoTaskAsync(ToDoTask toDoTask)
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             toDoTask.UserId = logedUserId;
 
-            toDoTaskRepository.Update(toDoTask);
-            await toDoTaskRepository.SaveAsync();
+            _toDoTaskRepository.Update(toDoTask);
+            await _toDoTaskRepository.SaveAsync();
         }
 
         #endregion
@@ -151,8 +151,8 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task DeleteToDoTaskAsync(ToDoTask todoTask)
         {
-            toDoTaskRepository.Remove(todoTask);
-            await toDoTaskRepository.SaveAsync();
+            _toDoTaskRepository.Remove(todoTask);
+            await _toDoTaskRepository.SaveAsync();
         }
         #endregion
 
@@ -160,9 +160,9 @@ namespace ToDo.ServiceLayer.Services
 
         public IEnumerable<ToDoTask> GetAllCompletedToDoTaskFromDb()
         {
-            var logedUserId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var logedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var toDoTaskFromDb = toDoTaskRepository.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
+            var toDoTaskFromDb = _toDoTaskRepository.GetAllEntityFromDb(u => u.Status == "Completed" && u.UserId == logedUserId);
 
             return toDoTaskFromDb;
         }
@@ -173,8 +173,8 @@ namespace ToDo.ServiceLayer.Services
 
         public async Task DeleteRangeToDoTaskAsync(IEnumerable<ToDoTask> toDoTaskFromDb)
         {
-            toDoTaskRepository.RemoveRange(toDoTaskFromDb);
-            await toDoTaskRepository.SaveAsync();
+            _toDoTaskRepository.RemoveRange(toDoTaskFromDb);
+            await _toDoTaskRepository.SaveAsync();
         }
 
         #endregion

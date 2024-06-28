@@ -11,7 +11,7 @@ namespace ToDoWeb.Controllers
     {
         #region Properties
 
-        private readonly IToDoTaskService toDoTaskService;
+        private readonly IToDoTaskService _toDoTaskService;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace ToDoWeb.Controllers
 
         public ToDoTaskController(IToDoTaskService toDoTaskService)
         {
-            this.toDoTaskService = toDoTaskService;
+            _toDoTaskService = toDoTaskService;
         }
 
         #endregion
@@ -28,7 +28,7 @@ namespace ToDoWeb.Controllers
 
         public async Task<IActionResult> Index(string queryTerm = "", int currentPage = 1, int pageSize = 5)
         {
-            var toDoTaskViewModel = await toDoTaskService.GetDoTaskViewModelFromDbAsync(queryTerm, currentPage, pageSize);
+            var toDoTaskViewModel = await _toDoTaskService.GetDoTaskViewModelFromDbAsync(queryTerm, currentPage, pageSize);
             
             return View(toDoTaskViewModel);
         }
@@ -39,7 +39,7 @@ namespace ToDoWeb.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.LabelList = toDoTaskService.GetLabelList();
+            ViewBag.LabelList = _toDoTaskService.GetLabelList();
 
             return View();
         }
@@ -53,7 +53,7 @@ namespace ToDoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await toDoTaskService.CreateNewToDoTaskAsync(toDoTask);
+                await _toDoTaskService.CreateNewToDoTaskAsync(toDoTask);
 
                 TempData["success"] = "Label Created Successfully";
 
@@ -74,14 +74,14 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await _toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
             }
 
-            ViewBag.LabelList = toDoTaskService.GetLabelList();
+            ViewBag.LabelList = _toDoTaskService.GetLabelList();
 
             return View(toDoTaskFromDb);
         }
@@ -95,7 +95,7 @@ namespace ToDoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                await toDoTaskService.UpdateToDoTaskAsync(toDoTask);
+                await _toDoTaskService.UpdateToDoTaskAsync(toDoTask);
                 TempData["success"] = "Label Updated Successfully";
 
                 return RedirectToAction("Index");
@@ -115,7 +115,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await _toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -132,14 +132,14 @@ namespace ToDoWeb.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeletePost(int? id)
         {
-            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await _toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
                 return NotFound();
             }
 
-            await toDoTaskService.DeleteToDoTaskAsync(toDoTaskFromDb);
+            await _toDoTaskService.DeleteToDoTaskAsync(toDoTaskFromDb);
             TempData["success"] = "Label Deleted Successfully";
 
             return RedirectToAction("Index");
@@ -156,7 +156,7 @@ namespace ToDoWeb.Controllers
                 return NotFound();
             }
 
-            var toDoTaskFromDb = await toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
+            var toDoTaskFromDb = await _toDoTaskService.GetFirstToDoTaskFromDbBySearchAsync(id);
 
             if (toDoTaskFromDb == null)
             {
@@ -164,7 +164,7 @@ namespace ToDoWeb.Controllers
             }
 
             toDoTaskFromDb.Status = "Completed";
-            await toDoTaskService.UpdateToDoTaskAsync(toDoTaskFromDb);
+            await _toDoTaskService.UpdateToDoTaskAsync(toDoTaskFromDb);
 
             TempData["success"] = "Congratulations, you have completed task successfully";
 
@@ -177,8 +177,8 @@ namespace ToDoWeb.Controllers
         #region DeleteCompletedTask
         public async Task<IActionResult> DeleteCompletedTask()
         {
-            var toDoTaskFromDb = toDoTaskService.GetAllCompletedToDoTaskFromDb();
-            await toDoTaskService.DeleteRangeToDoTaskAsync(toDoTaskFromDb);
+            var toDoTaskFromDb = _toDoTaskService.GetAllCompletedToDoTaskFromDb();
+            await _toDoTaskService.DeleteRangeToDoTaskAsync(toDoTaskFromDb);
 
             TempData["success"] = "Removed All The Completed Task";
 
