@@ -100,6 +100,7 @@ namespace ToDoWeb.Controllers
 
                 return RedirectToAction("Index");
             }
+            ViewBag.LabelList = _toDoTaskService.GetLabelList();
 
             return View();
         }

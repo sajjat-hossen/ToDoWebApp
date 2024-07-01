@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ToDo.DomainLayer.CustomDataAnnotation;
 
 namespace ToDo.DomainLayer.Models
 {
@@ -17,6 +18,7 @@ namespace ToDo.DomainLayer.Models
         public string Description { get; set; }
 
         [Required]
+        [ValidDueDate]
         public DateTime DueDate { get; set; }
 
         [Required]
